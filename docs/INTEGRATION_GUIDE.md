@@ -19,7 +19,22 @@
 
 ## 构建步骤
 
-### 1. 编译cuSZp
+### 快速构建（推荐）
+
+使用提供的自动化脚本（最简单）：
+
+```bash
+chmod +x build.sh
+./build.sh
+```
+
+该脚本会自动完成所有编译步骤，包括依赖检查和构建验证。
+
+### 手动构建（高级用户）
+
+如果需要自定义编译选项或了解详细步骤，可以手动执行以下步骤：
+
+#### 1. 编译cuSZp
 
 ```bash
 cd cuSZp
@@ -29,20 +44,13 @@ make -j$(nproc)
 make install
 ```
 
-### 2. 编译cuSZp包装器
+#### 2. 编译cuSZp包装器
 
 ```bash
 cd ../../integration/cuszp_wrapper
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
-```
-
-或者使用提供的构建脚本：
-
-```bash
-chmod +x build.sh
-./build.sh
 ```
 
 ### 3. 设置Python路径

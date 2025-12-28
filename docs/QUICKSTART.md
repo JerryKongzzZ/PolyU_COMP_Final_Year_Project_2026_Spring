@@ -59,13 +59,15 @@ git push
 - Azure GPU VM
 
 **方案B: Docker容器**
-```bash
-# 构建Docker镜像
-cd docker
-docker build -t vllm-cuszp:latest .
 
-# 运行容器
-docker run --gpus all -it vllm-cuszp:latest
+详细Docker使用说明请参考 `docs/DEPLOYMENT.md` 中的"Docker容器"部分。
+
+快速开始：
+```bash
+cd docker
+chmod +x run.sh
+./run.sh build    # 构建镜像
+./run.sh run      # 运行容器
 ```
 
 **方案C: 远程Linux服务器**
@@ -80,23 +82,18 @@ cd FYP
 
 ### 步骤3: 构建项目
 
+**推荐：使用自动化脚本**
+
 ```bash
-# 使用自动化脚本
 chmod +x build.sh
 ./build.sh
-
-# 或手动构建
-cd cuSZp
-mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install/ ..
-make -j$(nproc)
-make install
-
-cd ../../integration/cuszp_wrapper
-mkdir build && cd build
-cmake ..
-make -j$(nproc)
 ```
+
+该脚本会自动完成所有编译步骤。
+
+**手动构建**（如需自定义选项）：
+
+详细手动构建步骤请参考 `docs/INTEGRATION_GUIDE.md` 中的"构建步骤"部分。
 
 ### 步骤4: 运行测试
 

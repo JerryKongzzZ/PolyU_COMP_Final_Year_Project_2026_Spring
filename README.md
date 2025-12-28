@@ -21,15 +21,27 @@ FYP/
 
 ## 环境要求
 
-本项目需要NVIDIA GPU和CUDA支持。请在支持CUDA的Linux环境中运行。
+本项目需要NVIDIA GPU和CUDA支持。
+
+### 支持的环境
+
+1. **Linux系统**（推荐，最简单）
+   - Ubuntu 20.04+ 或其他Linux发行版
+   - 直接支持Docker和NVIDIA Container Toolkit
+
+2. **Windows系统**（需要WSL2）
+   - Windows 10/11 + WSL2 + Docker Desktop
+   - 需要安装支持WSL2的NVIDIA驱动
+   - 需要在WSL2中配置NVIDIA Container Toolkit
+   - 详细步骤请参考 `docker/README.md` 中的"Windows用户指南"
 
 ### 部署方案
 
 1. **云GPU服务**：使用AWS、GCP、Azure等云服务商的GPU实例
-2. **Docker容器**：使用Docker运行支持CUDA的容器
+2. **Docker容器**：使用Docker运行支持CUDA的容器（Linux或Windows WSL2）
 3. **本地服务器**：在具有NVIDIA GPU的Linux服务器上运行
 
-详细部署指南请参考 `docs/DEPLOYMENT.md`
+详细部署指南请参考 `docs/DEPLOYMENT.md` 和 `docker/README.md`
 
 ## 实施阶段
 
@@ -67,31 +79,32 @@ FYP/
 - Python 3.9+
 - CMake 3.21+
 
-### 2. 编译cuSZp
+### 2. 编译项目
 
-```bash
-cd cuSZp
-mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install/ ..
-make -j
-make install
-```
-
-### 3. 编译cuSZp包装器
-
-```bash
-cd integration/cuszp_wrapper
-mkdir build && cd build
-cmake ..
-make -j
-```
-
-或者使用自动化脚本：
+**推荐：使用自动化脚本**（最简单）
 
 ```bash
 chmod +x build.sh
 ./build.sh
 ```
+
+该脚本会自动编译cuSZp和cuSZp包装器。
+
+**手动编译**（如需自定义选项）：
+
+详细步骤请参考 `docs/INTEGRATION_GUIDE.md` 中的"构建步骤"部分。
+
+### 3. 使用Docker运行（推荐）
+
+**快速开始**：
+```bash
+cd docker
+chmod +x run.sh
+./run.sh build    # 构建镜像
+./run.sh run      # 运行容器
+```
+
+详细说明和更多选项请参考 `docs/DEPLOYMENT.md` 中的"Docker容器"部分。
 
 ### 4. 集成到vLLM
 
@@ -111,6 +124,8 @@ python benchmarks/baseline_profiling.py
 # 压缩性能测试
 python benchmarks/compression_benchmark.py
 ```
+
+更多测试选项和参数说明请参考 `docs/QUICKSTART.md`。
 
 ## 项目状态
 

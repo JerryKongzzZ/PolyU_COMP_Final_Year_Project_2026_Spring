@@ -28,13 +28,18 @@ RUN pip3 install \
     numpy \
     pybind11 \
     setuptools \
-    wheel
+    wheel \
+    vllm
 
 # 设置工作目录
 WORKDIR /workspace
 
-# 复制项目文件
+# 复制项目文件（排除cuSZp目录，因为将从GitHub克隆）
 COPY . /workspace/
+
+# 克隆cuSZp仓库（如果目录已存在则先删除）
+RUN rm -rf /workspace/cuSZp && \
+    git clone https://github.com/szcompressor/cuSZp.git /workspace/cuSZp
 
 # 编译cuSZp
 WORKDIR /workspace/cuSZp

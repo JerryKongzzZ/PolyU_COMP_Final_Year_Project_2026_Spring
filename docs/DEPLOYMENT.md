@@ -49,6 +49,8 @@
 
 ### 方案2: Docker容器（需要Linux环境）
 
+> **快速开始**：如果只需要快速运行，可以使用 `docker/run.sh` 脚本。详细说明请参考 `README.md` 中的"Docker运行"部分。
+
 #### 使用NVIDIA Container Toolkit
 
 1. **在Linux服务器上安装Docker和NVIDIA Container Toolkit**
@@ -67,14 +69,61 @@
    ```
 
 2. **构建Docker镜像**
+
+   **方法A：使用运行脚本（最简单，推荐）**
    ```bash
    cd docker
-   docker build -t vllm-cuszp:latest .
+   chmod +x run.sh
+   ./run.sh build
+   ```
+
+   **方法B：使用docker build**
+   ```bash
+   cd docker
+   docker build -t vllm-cuszp:latest -f Dockerfile ..
+   ```
+   注意：`-f Dockerfile` 指定Dockerfile路径，`..` 是构建上下文（项目根目录）
+
+   **方法C：使用docker-compose**
+   ```bash
+   cd docker
+   docker-compose build
    ```
 
 3. **运行容器**
+
+   **方法A：使用运行脚本（最简单，推荐）**
    ```bash
-   docker run --gpus all -it vllm-cuszp:latest
+   cd docker
+   ./run.sh run
+   ```
+
+   **方法B：使用docker run**
+   ```bash
+   docker run --gpus all -it \
+     -v $(pwd)/..:/workspace \
+     vllm-cuszp:latest
+   ```
+
+   **方法C：使用docker-compose**
+   ```bash
+   cd docker
+   docker-compose up -d  # 后台运行
+   docker-compose exec vllm-cuszp bash  # 进入容器
+   # 或者直接交互式运行
+   docker-compose run --rm vllm-cuszp bash
+   ```
+
+4. **在容器内运行测试**
+   ```bash
+   # 进入容器后
+   cd /workspace
+   
+   # 运行基线性能测试
+   python3 benchmarks/baseline_profiling.py
+   
+   # 运行压缩性能测试
+   python3 benchmarks/compression_benchmark.py
    ```
 
 ### 方案3: 本地Linux服务器

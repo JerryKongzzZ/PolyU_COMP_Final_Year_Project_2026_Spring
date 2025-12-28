@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  vllm-cuszp:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: vllm-cuszp:latest
+    container_name: vllm-cuszp-container
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    volumes:
+      # 挂载项目目录以便代码更改
+      - ../:/workspace
+      # 可选：挂载数据目录
+      - ./data:/workspace/data
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    # 默认命令：保持容器运行
+    command: /bin/bash
+
