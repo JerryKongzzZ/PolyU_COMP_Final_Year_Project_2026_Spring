@@ -14,6 +14,7 @@ import logging
 import numpy as np
 from typing import Dict, List
 import json
+import ctypes
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -270,6 +271,5 @@ def main():
 
 
 if __name__ == "__main__":
-    import ctypes
     main()
 
